@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title>Session Words</title>
+        <style>
+            h3 {
+                margin-top: 0;
+            }
+            .wrapper {
+                width: 50%;
+                display: flex;
+                 margin: 0 auto; 
+            }
+            .add_to_session {
+                background-color: lightblue;
+            }
+            .add_word, .session_words {
+                margin: 20px;
+                padding: 20px;
+            }
+            .session_words {
+                border-left: 1px black solid;
+            }
+            .clear_session {
+                background-color: lightcoral;
+            }
+            span {
+                color: black;
+                font-size: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            
+            <div class="add_word">
+                <h3>Add a new word:</h3>
+                <form action="/session_words/add_word" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="word">
+                    <br><br>
+                    Choose a color:
+                    <br>
+                    <input type="radio" name="color" value="red" checked> Red<br>
+                    <input type="radio" name="color" value="green"> Green<br>
+                    <input type="radio" name="color" value="blue"> Blue<br>
+                    <br>
+                    <input type="checkbox" name="big_font" value="big"> show in BIG font! <br>
+                    <br>
+                    <input type="submit" value="Add to Session" class="add_to_session">
+                </form>
+            </div>
+
+            <div class="session_words">
+                <div>
+                    <form action="/session_words/clear" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Clear Session" class="clear_session">
+                    </form>
+                </div>
+                <div>
+                    {% for word in request.session.words %}
+                     <p style="font-size:{{word.font_size}}; color:{{word.color}}">{{word.word}}<span> - added on {{word.time}}</span></p>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
